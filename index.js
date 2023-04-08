@@ -19,7 +19,7 @@ Quản lý chất lượng dự án là một phần không thể thiếu trong 
 Quản lý chất lượng đảm bảo sự thành công của dự án, tăng cường tính minh bạch và tin cậy, tăng cường tầm nhìn, đảm bảo tính hiệu quả và hiệu suất của dự án, đảm bảo sự trung thực và bảo mật của các thông tin và dữ liệu liên quan đến dự án.`,
 ]
 
-app.get('/', async (req, res) => {
+app.get('/gpt', async (req, res) => {
   try {
     const proArr = [getAns(inputs[0])]
     const ans = await Promise.all(proArr)
@@ -40,6 +40,10 @@ app.get('/form', async (req, res) => {
       res.status(200).json({ message: 'success', data })
     })
     .catch((err) => res.status(500).json(err))
+})
+
+app.get('/', (req, res) => {
+  res.status(200).json({ message: 'success' })
 })
 
 app.listen(2400, () => {
