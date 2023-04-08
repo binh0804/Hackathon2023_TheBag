@@ -1,6 +1,6 @@
 function parseQuestions(str) {
   const regex =
-    /(\d+)\.\s(.+)\n\s+A\)\s(.+)\n\s+B\)\s(.+)\n\s+C\)\s(.+)\n\s+D\)\s(.+)\n\s+Đáp án:\s(.+)\n\s+Giải thích:\s(.+)/gm
+    /(\d+)\.\s(.+)\n\s+A\)\s(.+)\n\s+B\)\s(.+)\n\s+C\)\s(.+)\n\s+D\)\s(.+)\n\s+Đáp án:\s(.+)/gm
   let match
   const questions = []
 
@@ -15,7 +15,6 @@ function parseQuestions(str) {
         D: match[6],
       },
       answer: match[7],
-      description: match[8],
     }
     questions.push(question)
   }
