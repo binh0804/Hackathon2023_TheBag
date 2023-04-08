@@ -41,10 +41,23 @@ Quản lý chất lượng đảm bảo sự thành công của dự án, tăng 
 
 app.get('/test/gpt', async (req, res) => {
   try {
-    const proArr = [getAns(inputs[0]),getAns(inputs[1]),getAns(inputs[2])]
+    const proArr = [getAns(inputs[0]), getAns(inputs[1]), getAns(inputs[2])]
     const ans = await Promise.all(proArr)
 
-    res.status(200).json(ans)
+    let index = 1
+    const list = []
+    ans.forEach((items) => {
+      items.forEach((item) => {
+        item.id = index++
+        list.push(item)
+      })
+    })
+    // console.log(list)
+    runSample(list)
+    .then((data) => {
+      res.status(200).json({ message: 'success', data })
+    })
+    .catch((err) => res.status(500).json({ message: 'failure', err }))
   } catch (error) {
     res.status(500).json(error)
   }
