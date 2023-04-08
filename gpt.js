@@ -3,12 +3,13 @@ const parseQuestions = require('./parseQuestions')
 const { Configuration, OpenAIApi } = require('openai')
 
 const getQuestion = (input) => {
-  return `Tạo nhiều nhất có thể các câu hỏi trắc nghiệm có 04 đáp án kèm theo đáp án đúng (không cần giải thích) từ đoạn văn sau: "${input}" theo định dạng sau: "1. Nội dung câu hỏi?
+  return `Tạo nhiều nhất có thể các câu hỏi trắc nghiệm có 04 đáp án kèm theo đáp án đúng (kèm giải thích) từ đoạn văn sau: "${input}" theo định dạng sau: "1. Nội dung câu hỏi?
   A) Đáp án 1
   B) Đáp án 2
   C) Đáp án 3
   D) Đáp án 4
-  Đáp án: D"`
+  Đáp án: D
+  Giải thích: Giải thích đáp án"`
 }
 
 const getAns = async (input) => {
