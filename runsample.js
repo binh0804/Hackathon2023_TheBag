@@ -15,12 +15,75 @@ async function runSample(query) {
   })
   const newForm = {
     info: {
-      title: 'Creating a new form in Node 2',
+      title: 'Creating a new form in Node with aws',
     },
   }
+  const NEW_QUESTION = {
+    requests: [
+      {
+        createItem: {
+          item: {
+            title:
+              'In what year did the United States land a mission on the moon?',
+            questionItem: {
+              question: {
+                required: true,
+                grading: {
+                  pointValue: 2,
+                  correctAnswers: {
+                    answers: [{ value: '1965' }],
+                  },
+                },
+                choiceQuestion: {
+                  type: 'RADIO',
+                  options: [
+                    { value: '1965' },
+                    { value: '1967' },
+                    { value: '1969' },
+                    { value: '1971' },
+                  ],
+                  shuffle: true,
+                },
+              },
+            },
+          },
+          location: {
+            index: 0,
+          },
+        },
+      },
+    ],
+  }
+
+  const updateSettings = {
+    requests: [
+      {
+        updateSettings: {
+          settings: {
+            quizSettings: {
+              isQuiz: true,
+            },
+          },
+          updateMask: "*"
+        },
+      },
+    ],
+  }
+
   const res = await forms.forms.create({
     requestBody: newForm,
   })
+
+  const up = await forms.forms.batchUpdate({
+    formId: res.data.formId,
+    requestBody: updateSettings,
+  })
+  const result = await forms.forms.batchUpdate({
+    formId: res.data.formId,
+    requestBody: NEW_QUESTION,
+  })
+
+  console.log(result.data)
   return res.data
 }
 
