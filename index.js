@@ -1,5 +1,11 @@
 const express = require('express')
 const { Configuration, OpenAIApi } = require('openai')
+const runSample = require('./runsample')
+
+const { google } = require('googleapis')
+const auth = new google.auth.GoogleAuth({
+  scopes: ['https://www.googleapis.com/auth/forms'], // the API scope needed for creating forms
+})
 require('dotenv').config()
 
 const app = express()
@@ -25,6 +31,14 @@ app.get('/', async (req, res) => {
   } catch (error) {
     res.status(500).json(error)
   }
+})
+
+app.get('/form', async (req, res) => {
+  runSample()
+    .then((data) => {
+      res.status(200).json({ message: 'success', data })
+    })
+    .catch((err) => res.status(500).json(err))
 })
 
 app.listen(2400, () => {
