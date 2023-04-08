@@ -1,10 +1,10 @@
 'use strict'
-
+const parseRequest = require('./parseRequest')
 const path = require('path')
 const google = require('@googleapis/forms')
 const { authenticate } = require('@google-cloud/local-auth')
 
-async function runSample(query) {
+async function runSample(questions) {
   const authClient = await authenticate({
     keyfilePath: path.join(__dirname, 'credentials.json'),
     scopes: 'https://www.googleapis.com/auth/drive',
@@ -15,46 +15,51 @@ async function runSample(query) {
   })
   const newForm = {
     info: {
-      title: 'Creating a new form in Node with aws',
+      title: 'Creating a new form in Node with aws tes',
     },
   }
+
+  const request = parseRequest(questions)
   const NEW_QUESTION = {
-    requests: [
-      {
-        createItem: {
-          item: {
-            title:
-              'In what year did the United States land a mission on the moon?',
-            questionItem: {
-              question: {
-                required: true,
-                grading: {
-                  pointValue: 2,
-                  correctAnswers: {
-                    answers: [{ value: '1965' }],
-                  },
-                },
-                choiceQuestion: {
-                  type: 'RADIO',
-                  options: [
-                    { value: '1965' },
-                    { value: '1967' },
-                    { value: '1969' },
-                    { value: '1971' },
-                  ],
-                  shuffle: true,
-                },
-              },
-            },
-          },
-          location: {
-            index: 0,
-          },
-        },
-      },
-    ],
+    requests: request,
   }
 
+  // const NEW_QUESTION = {
+  //   requests: [
+  //     {
+  //       createItem: {
+  //         item: {
+  //           title:
+  //             'In what year did the United States land a mission on the moon?',
+  //           questionItem: {
+  //             question: {
+  //               required: true,
+  //               grading: {
+  //                 pointValue: 2,
+  //                 correctAnswers: {
+  //                   answers: [{ value: '1965' }],
+  //                 },
+  //               },
+  //               choiceQuestion: {
+  //                 type: 'RADIO',
+  //                 options: [
+  //                   { value: '1965' },
+  //                   { value: '1967' },
+  //                   { value: '1969' },
+  //                   { value: '1971' },
+  //                 ],
+  //                 shuffle: true,
+  //               },
+  //             },
+  //           },
+  //         },
+  //         location: {
+  //           index: 0,
+  //         },
+  //       },
+  //     },
+  //   ],
+  // }
   const updateSettings = {
     requests: [
       {
@@ -64,7 +69,7 @@ async function runSample(query) {
               isQuiz: true,
             },
           },
-          updateMask: "*"
+          updateMask: '*',
         },
       },
     ],

@@ -1,40 +1,41 @@
 const express = require('express')
-const { Configuration, OpenAIApi } = require('openai')
 const runSample = require('./runsample')
-
-const { google } = require('googleapis')
-const auth = new google.auth.GoogleAuth({
-  scopes: ['https://www.googleapis.com/auth/forms'], // the API scope needed for creating forms
-})
-require('dotenv').config()
+const getAns = require('./gpt')
 
 const app = express()
-const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
-})
-const openai = new OpenAIApi(configuration)
 
-const messages = []
-const user_input =
-  'Tạo 5 câu hỏi trắc nghiệm có 4 đáp án từ văn bản sau: Code quality tool là một loại công cụ phần mềm được sử dụng để kiểm tra chất lượng mã nguồn trong quá trình phát triển phần mềm. Các công cụ này cung cấp các cách tiếp cận khác nhau để đánh giá chất lượng của mã nguồn, bao gồm cả việc phân tích mã nguồn, kiểm tra lỗi, đánh giá khả năng mở rộng, hiệu suất và độ bảo mật.'
+const user_input = ``
 
-messages.push({ role: 'user', content: user_input })
+const inputs = [
+  `1.Quan niệm về chất lượng (phần mềm)
+Chất lượng phần mềm liên quan đến độ tin cậy, khả năng bảo mật, tính khả dụng, hiệu suất và tính hợp tác của một phần mềm, một phần mềm được xem là có chất lượng khi nó đáp ứng được các yêu cầu về tính năng , hiệu suất và bảo mật một cách đáng chất lượng. Ngoài ra quan niệm về chất lượng phần mềm còn gắn liền với cung cấp trải nghiệm và giá trị sử dụng tốt cho người sử dụng.`,
+  `2.Khái niệm về chất lượng
+Tổ chức quốc tế và tiêu chuẩn hóa (ISO =  International Standard Organisation) xác định chất lượng như tổng thể các chi tiết nhỏ của một sản phẩm mà nó phải thỏa mãn những quy định đã được đề ra
+Ngoài ra một số chuyên gia còn định nghĩa theo nguyên tắc cơ bản
+Yêu cầu phù hợp: thỏa mãn các yêu cầu đòi hỏi
+Tiện lợi cho sử dụng: chắc chắn rằng một sản phẩm có thể được sử dụng ngay từ khi có ý đính sản xuất nó.`,
+  `3.Tầm quan trọng của quản lý chất lượng
+Quản lý chất lượng dự án là một phần không thể thiếu trong quản lý dự án. Nó đảm bảo rằng các sản phẩm, dịch vụ và kết quả của dự án đáp ứng được các yêu cầu của khách hàng, đáp ứng các tiêu chuẩn và luôn đạt được chất lượng tối ưu.
+Quản lý chất lượng đảm bảo sự thành công của dự án, tăng cường tính minh bạch và tin cậy, tăng cường tầm nhìn, đảm bảo tính hiệu quả và hiệu suất của dự án, đảm bảo sự trung thực và bảo mật của các thông tin và dữ liệu liên quan đến dự án.`,
+]
+
 app.get('/', async (req, res) => {
   try {
-    const completion = await openai.createChatCompletion({
-      model: 'gpt-3.5-turbo',
-      messages: messages,
-    })
-    const completion_text = completion.data.choices[0].message.content
+    const proArr = [getAns(inputs[0])]
+    const ans = await Promise.all(proArr)
 
-    res.status(200).json(completion_text)
+    res.status(200).json(ans)
   } catch (error) {
     res.status(500).json(error)
   }
 })
 
 app.get('/form', async (req, res) => {
-  runSample()
+  // const proArr = [getAns(inputs[0])]
+
+  const ans = await getAns(inputs[0])
+
+  runSample(ans)
     .then((data) => {
       res.status(200).json({ message: 'success', data })
     })
