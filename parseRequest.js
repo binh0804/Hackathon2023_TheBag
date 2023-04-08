@@ -48,6 +48,9 @@ const parseRequest = (inputQuestions) => {
                 correctAnswers: {
                   answers: [{ value: question.options[question.answer] }],
                 },
+                whenWrong: {
+                  text: question.description,
+                },
               },
               choiceQuestion: {
                 type: 'RADIO',
