@@ -4,7 +4,7 @@ const path = require('path')
 const google = require('@googleapis/forms')
 const { authenticate } = require('@google-cloud/local-auth')
 
-async function runSample(questions) {
+async function runSample(questions, title = 'Demo') {
   const authClient = await authenticate({
     keyfilePath: path.join(__dirname, 'credentials.json'),
     scopes: 'https://www.googleapis.com/auth/drive',
@@ -15,11 +15,12 @@ async function runSample(questions) {
   })
   const newForm = {
     info: {
-      title: 'Creating a new form in Node with aws tes',
+      title,
     },
   }
 
   const request = parseRequest(questions)
+  console.log(`parseRequest: ${{ request }}`)
   const NEW_QUESTION = {
     requests: request,
   }

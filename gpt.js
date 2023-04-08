@@ -31,6 +31,7 @@ const getAns = async (input) => {
 
   console.log(completion_text)
   const result = parseQuestions(completion_text)
+  console.log(`\n\n parseQuestions: ${result}`)
   return result
 }
 
